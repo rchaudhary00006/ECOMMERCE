@@ -1,7 +1,7 @@
 ############################
 # OS X
 ############################
-
+.gitignore
 .DS_Store
 .AppleDouble
 .LSOverride
