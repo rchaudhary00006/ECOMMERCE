@@ -3,7 +3,7 @@ import "./Collection.scss";
 import Product from "../../components/product/Product";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-
+//fish shell
 const Collection = () => {
   const navigate = useNavigate();
   const params = useParams();
