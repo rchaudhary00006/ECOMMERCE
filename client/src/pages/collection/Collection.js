@@ -3,11 +3,13 @@ import "./Collection.scss";
 import Product from "../../components/product/Product";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { axiosClient } from "../../utils/axiosClient";
 //fish shell
 const Collection = () => {
   const navigate = useNavigate();
   const params = useParams();
   const [categoryId, setCategoryId] = useState("");
+  const [products, setProducts] = useState(null);
   const categories = useSelector(
     (state) => state.categorySliceReducer.categories
   );
@@ -15,10 +17,39 @@ const Collection = () => {
   function updateCategory(e) {
     navigate(`/category/${e.target.value}`);
   }
+
+  const sortOptions = [
+    {
+      value: "Price - Low To High",
+      sort: "price",
+    },
+    {
+      value: "Newest-First",
+      sort: "createdAt",
+    },
+  ];
+
+
+  const [sortBy , setSortBy] = useState(sortOptions[0].sort);
+
+  function handleSortChange(e) {
+    const sortKey = e.target.value;
+    console.log(sortKey);
+    setSortBy(sortKey);
+  }
+
+  async function fetchData() {
+    const response = await axiosClient.get(
+      `/products?populate=image&filters[category][key]=${params.categoryId}&sort=${sortBy}`
+    );
+    setProducts(response.data.data);
+  }
+
   useEffect(() => {
     setCategoryId(params.categoryId);
     //api call
-  }, [params.categoryId]);
+    fetchData();
+  }, [params.categoryId,sortBy]);
   return (
     <div className="Categories">
       <div className="container">
@@ -35,10 +66,15 @@ const Collection = () => {
           <div className="sort-by">
             <div className="sort-by-container">
               <h3 className="sort-by-text">Sort By</h3>
-              <select className="select-sort-by" name="sort-by" id="sort-by">
-                <option value="relevance">Relevance</option>
-                <option value="newest-first">Newest First</option>
-                <option value="price-lth">Price - Low To High</option>
+              <select
+                className="select-sort-by"
+                name="sort-by"
+                id="sort-by"
+                onChange={(e) => handleSortChange(e)}
+              >
+                {sortOptions.map((item) => (
+                  <option key={item.sort} value={item.sort}>{item.value}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -63,12 +99,9 @@ const Collection = () => {
             </div>
           </div>
           <div className="product-box">
-            <Product />
-            <Product />
-            <Product />
-            <Product />
-            <Product />
-            <Product />
+            {products?.map((product) => (
+              <Product key={product.id} product={product} />
+            ))}
           </div>
         </div>
       </div>
