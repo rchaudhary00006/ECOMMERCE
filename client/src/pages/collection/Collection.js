@@ -29,8 +29,7 @@ const Collection = () => {
     },
   ];
 
-
-  const [sortBy , setSortBy] = useState(sortOptions[0].sort);
+  const [sortBy, setSortBy] = useState(sortOptions[0].sort);
 
   function handleSortChange(e) {
     const sortKey = e.target.value;
@@ -49,7 +48,7 @@ const Collection = () => {
     setCategoryId(params.categoryId);
     //api call
     fetchData();
-  }, [params.categoryId,sortBy]);
+  }, [params.categoryId, sortBy]);
   return (
     <div className="Categories">
       <div className="container">
@@ -73,7 +72,9 @@ const Collection = () => {
                 onChange={(e) => handleSortChange(e)}
               >
                 {sortOptions.map((item) => (
-                  <option key={item.sort} value={item.sort}>{item.value}</option>
+                  <option key={item.sort} value={item.sort}>
+                    {item.value}
+                  </option>
                 ))}
               </select>
             </div>

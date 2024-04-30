@@ -11,6 +11,11 @@ const Navbar = () => {
   const categories = useSelector(
     (state) => state.categorySliceReducer.categories
   );
+
+  const cart = useSelector((state) => state.cartSliceReducer.cart);
+  let totalItems = 0;
+  cart.forEach((item)=> totalItems += item.quantity);
+
   return (
     <>
       <nav className="Navbar">
@@ -40,7 +45,9 @@ const Navbar = () => {
               onClick={() => setOpenCart(!openCart)}
             >
               <BsCart2 className="icon" />
-              <span className="cart-count center">99</span>
+              {totalItems > 0 && 
+              <span className="cart-count center">{totalItems}</span>
+            }
             </div>
           </div>
         </div>
