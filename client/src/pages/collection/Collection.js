@@ -38,9 +38,10 @@ const Collection = () => {
   }
 
   async function fetchData() {
-    const response = await axiosClient.get(
-      `/products?populate=image&filters[category][key]=${params.categoryId}&sort=${sortBy}`
-    );
+    const url = params.categoryId
+      ? `/products?populate=image&filters[category][key]=${params.categoryId}&sort=${sortBy}`
+      : `/products?populate=image&sort=${sortBy}`;
+    const response = await axiosClient.get(url);
     setProducts(response.data.data);
   }
 
